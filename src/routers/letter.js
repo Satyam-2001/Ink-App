@@ -5,7 +5,7 @@ const router = new express.Router()
 
 const upload = multer({
     limits: {
-        fileSize: 1000000
+        fileSize: 10000000
     },
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/\.(jpg|jpeg|png)$/)) {
