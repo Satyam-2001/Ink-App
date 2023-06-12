@@ -60,7 +60,6 @@ const getImage = (box, pixels) => {
     })
 }
 
-
 const extractImage = async (file) => {
     const { buffer, mimetype } = file
     const pixels = await getPixels(buffer, mimetype);
@@ -68,7 +67,7 @@ const extractImage = async (file) => {
     const image_arr = []
     for (let data_item of data_arr) {
         const image = await getImage(data_item.box, pixels)
-        image_arr.push({ image, ...data_item })
+        image_arr.push({ image, baseline : data_item.baseline - data_item.box.x0, ...data_item })
     }
     return image_arr;
 }
