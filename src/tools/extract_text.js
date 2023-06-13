@@ -60,14 +60,22 @@ const getImage = (box, pixels) => {
     })
 }
 
+const baseLineLowerLetters = ['p', 'q', 'g', 'y', 'j']
+
 const extractImage = async (file) => {
     const { buffer, mimetype } = file
     const pixels = await getPixels(buffer, mimetype);
     const data_arr = await extraxtTextImageData(buffer)
     const image_arr = []
     for (let data_item of data_arr) {
-        const image = await getImage(data_item.box, pixels)
-        image_arr.push({ image, baseline : data_item.baseline - data_item.box.x0, ...data_item })
+        const { box, text, confidence } = data_item
+        if (confidence < 50) continue
+        const image = await getImage(box, pixels)
+        let baseline = 0;
+        if (baseLineLowerLetters.includes(text)) {
+            baseline = parseInt((box.y0 - box.y1) / 2)
+        }
+        image_arr.push({ image, text, baseline})
     }
     return image_arr;
 }
